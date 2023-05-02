@@ -1,0 +1,5 @@
+{
+  "port": 4444,
+  "jwtSecret": "postes services secret_jwt",
+  "baseUrl": "http://localhost:4444"
+}
