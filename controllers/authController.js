@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import config from 'config';
+import bcrypt from 'bcryptjs';
 import UserEntity from '../entities/UserEntity.js';
 
 class AuthController {
@@ -13,16 +14,22 @@ class AuthController {
     try {
       const { email, password } = req.body;
 
+      const findedUser = (await this.#repository.findByEmail(email))[0];
+      if (findedUser) {
+        return res.status(400).send(`User with email: ${email} exist in BD`);
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 12);
       let user = new UserEntity();
       user.email = email;
-      user.password = password;
+      user.password = hashedPassword;
 
       const createdUser = await this.#repository.add(user);
 
-      res.status(201).json(createdUser);
+      return res.status(201).json({ id: createdUser.id, email: createdUser.email });
     } catch (error) {
       console.log('registration:', error);
-      res.status(500).send(error.message);
+      return res.status(500).send(error.message);
     }
   };
 
@@ -30,21 +37,21 @@ class AuthController {
     try {
       const { email, password } = req.body;
 
-      let user = new UserEntity();
-      user.email = email;
-      user.password = password;
-
-      const findedUser = (await this.#repository.find(user))[0];
-
-      if (findedUser) {
-        const token = jwt.sign({ id: findedUser.id }, config.get('jwtSecret'));
-        res.json({ success: true, token });
-      } else {
-        res.status(401).json({ success: false, message: 'Error authorization!' });
+      const findedUser = (await this.#repository.findByEmail(email))[0];
+      if (!findedUser) {
+        return res.status(401).json({ success: false, message: 'Error authorization!' });
       }
+
+      const isMatch = await bcrypt.compare(password, findedUser.password);
+      if (!isMatch) {
+        return res.status(401).json({ success: false, message: 'Error authorization!' });
+      }
+
+      const token = jwt.sign({ id: findedUser.id }, config.get('jwtSecret'));
+      return res.json({ success: true, token });
     } catch (error) {
-      console.log(error);
-      res.status(500).send(error.message);
+      console.log('login:', error);
+      return res.status(500).send(error.message);
     }
   };
 
@@ -52,10 +59,10 @@ class AuthController {
     try {
       const users = await this.#repository.getAll();
 
-      res.json(users);
+      return res.json(users);
     } catch (error) {
       console.log(error);
-      res.status(500).send(error.message);
+      return res.status(500).send(error.message);
     }
   };
 
@@ -63,10 +70,10 @@ class AuthController {
     try {
       const user = await this.#repository.getById(req.params.id);
 
-      res.json(user);
+      return res.json({ id: user.id, email: user.email });
     } catch (error) {
       console.log(error);
-      res.status(500).send(error.message);
+      return res.status(500).send(error.message);
     }
   };
 }
