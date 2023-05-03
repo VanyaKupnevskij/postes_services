@@ -76,6 +76,20 @@ class AuthController {
       return res.status(500).send(error.message);
     }
   };
+
+  deleteUserById = async (req, res) => {
+    try {
+      const isSeccessful = await this.#repository.remove(req.params.id);
+      if (!isSeccessful) {
+        return res.status(400).send(`Failed deleted user by id:${req.params.id}`);
+      }
+
+      return res.send(`Seccesful deleted user by id:${req.params.id}`);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error.message);
+    }
+  };
 }
 
 export default AuthController;

@@ -21,9 +21,7 @@ class UserRepository extends IRepository {
   async update(id, newUser) {}
 
   async getById(id) {
-    if (!UID.isValid(id)) {
-      throw new Error(`Id: ${id} is not valid`);
-    }
+    this.#chekId(id);
 
     const [rows] = await connection.execute('SELECT * FROM users WHERE id = ?', [id]);
 
@@ -39,12 +37,24 @@ class UserRepository extends IRepository {
     return rows;
   }
 
-  async remove(id) {}
+  async remove(id) {
+    this.#chekId(id);
+
+    const result = await connection.query('DELETE FROM users WHERE id = ?', [id]);
+
+    return result[0].affectedRows > 0;
+  }
 
   async findByEmail(email) {
     const [rows] = await connection.execute('SELECT * FROM users WHERE email = ?', [email]);
 
     return rows;
+  }
+
+  #chekId(id) {
+    if (!UID.isValid(id)) {
+      throw new Error(`Id: ${id} is not valid`);
+    }
   }
 }
 
