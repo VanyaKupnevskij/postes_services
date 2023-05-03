@@ -30,10 +30,14 @@ class AuthController {
     try {
       const { email, password } = req.body;
 
-      const isLogin = email === 'admin@gmail.com' && password === '12345';
+      let user = new UserEntity();
+      user.email = email;
+      user.password = password;
 
-      if (isLogin) {
-        const token = jwt.sign({ email, fullname: 'nameUser' }, config.get('jwtSecret'));
+      const findedUser = (await this.#repository.find(user))[0];
+
+      if (findedUser) {
+        const token = jwt.sign({ id: findedUser.id }, config.get('jwtSecret'));
         res.json({ success: true, token });
       } else {
         res.status(401).json({ success: false, message: 'Error authorization!' });
@@ -46,7 +50,9 @@ class AuthController {
 
   getUsers = async (req, res) => {
     try {
-      res.send('users'); // temporary code
+      const users = await this.#repository.getAll();
+
+      res.json(users);
     } catch (error) {
       console.log(error);
       res.status(500).send(error.message);

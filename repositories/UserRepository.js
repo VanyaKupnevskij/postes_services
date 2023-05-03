@@ -9,7 +9,7 @@ class UserRepository extends IRepository {
   }
 
   async add(newUser) {
-    const isExist = await this.isExist(newUser);
+    const isExist = await this.isExistEmail(newUser);
     if (isExist) {
       throw new Error(`User with email: ${newUser.email} exist in BD`);
     }
@@ -21,12 +21,6 @@ class UserRepository extends IRepository {
     ]);
 
     return this.getById(newUser.id);
-  }
-
-  async isExist(user) {
-    const [rows] = await connection.execute('SELECT * FROM users WHERE email = ?', [user.email]);
-
-    return Boolean(rows[0]);
   }
 
   async update(id, newUser) {}
@@ -45,9 +39,28 @@ class UserRepository extends IRepository {
     return user;
   }
 
-  async getAll() {}
+  async getAll() {
+    const [rows] = await connection.execute('SELECT * FROM users');
+
+    return rows;
+  }
 
   async remove(id) {}
+
+  async isExistByEmail(email) {
+    const [rows] = await connection.execute('SELECT * FROM users WHERE email = ?', [email]);
+
+    return Boolean(rows[0]);
+  }
+
+  async find(user) {
+    const [rows] = await connection.execute(
+      'SELECT * FROM users WHERE email = ? AND password = ?',
+      [user.email, user.password],
+    );
+
+    return rows;
+  }
 }
 
 export default UserRepository;
