@@ -1,5 +1,6 @@
 import express from 'express';
 import authRouter from './routers/auth.route.js';
+import postRouter from './routers/post.route.js';
 import cors from './middlewares/cors.middleware.js';
 import config from 'config';
 
@@ -11,6 +12,7 @@ app.use(cors);
 app.use(express.json({ extended: true }));
 
 app.use('/api/auth', authRouter);
+app.use('/api/postes/', postRouter);
 
 if (process.env.NODE_ENV === 'production') {
   app.use('/', express.static(path.join(__dirname, 'client', 'build')));
@@ -24,7 +26,7 @@ async function start() {
   try {
     app.listen(PORT, () => console.log(`Server start OK on port: ${PORT}`));
   } catch (error) {
-    console.log('Server Error:', error);
+    console.log('Server Error:', error.message);
     process.exit(1);
   }
 }

@@ -4,12 +4,12 @@ import bcrypt from 'bcryptjs';
 import UserEntity from '../entities/UserEntity.js';
 import IController from './IController.js';
 
-class AuthController extends IController {
+class PostController extends IController {
   constructor(repository) {
     super(repository);
   }
 
-  registration = async (req, res) => {
+  create = async (req, res) => {
     try {
       const { email, password } = req.body;
 
@@ -54,7 +54,7 @@ class AuthController extends IController {
     }
   };
 
-  getUsers = async (req, res) => {
+  getAll = async (req, res) => {
     try {
       const users = await this.repository.getAll();
 
@@ -65,7 +65,7 @@ class AuthController extends IController {
     }
   };
 
-  getUserById = async (req, res) => {
+  getById = async (req, res) => {
     try {
       const user = await this.repository.getById(req.params.id);
 
@@ -76,7 +76,7 @@ class AuthController extends IController {
     }
   };
 
-  deleteUserById = async (req, res) => {
+  deleteById = async (req, res) => {
     try {
       const isSeccessful = await this.repository.remove(req.params.id);
       if (!isSeccessful) {
@@ -91,4 +91,4 @@ class AuthController extends IController {
   };
 }
 
-export default AuthController;
+export default PostController;
