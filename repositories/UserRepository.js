@@ -1,7 +1,7 @@
 import IRepository from './IRepository.js';
 
 import { pool as connection } from '../config/database.mysql.js';
-import UID from '../lib/UID.js';
+import AppError, { ERROR_PRESETS } from '../errors/AppError.js';
 
 class UserRepository extends IRepository {
   constructor() {
@@ -21,12 +21,10 @@ class UserRepository extends IRepository {
   async update(id, newUser) {}
 
   async getById(id) {
-    this.#chekId(id);
-
     const [rows] = await connection.execute('SELECT * FROM users WHERE id = ?', [id]);
 
     const user = rows[0];
-    if (!user) throw new Error(`The user with ${id} id does not exist.`);
+    if (!user) throw new AppError(ERROR_PRESETS.USER_ID_NOT_EXIST(id));
 
     return user;
   }
@@ -38,8 +36,6 @@ class UserRepository extends IRepository {
   }
 
   async remove(id) {
-    this.#chekId(id);
-
     const result = await connection.query('DELETE FROM users WHERE id = ?', [id]);
 
     return result[0].affectedRows > 0;
@@ -49,12 +45,6 @@ class UserRepository extends IRepository {
     const [rows] = await connection.execute('SELECT * FROM users WHERE email = ?', [email]);
 
     return rows;
-  }
-
-  #chekId(id) {
-    if (!UID.isValid(id)) {
-      throw new Error(`Id: ${id} is not valid`);
-    }
   }
 }
 
