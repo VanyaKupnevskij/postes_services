@@ -1,38 +1,25 @@
 import jwt from 'jsonwebtoken';
 import config from 'config';
 import bcrypt from 'bcryptjs';
-import { STATUS, USER_CODE, STRENGTH_BCRYCT } from '../config/enums.js';
-import UserEntity from '../entities/UserEntity.js';
-import IController from './IController.js';
+import { STATUS, USER_CODE, LAYER } from '../config/enums.js';
 
-class AuthController extends IController {
-  constructor(repository) {
-    super(repository);
+import BaseController from './BaseController.js';
+import AuthService from '../services/AuthService.js';
+import UserRepository from '../repositories/UserRepository.js';
+
+class AuthController extends BaseController {
+  constructor() {
+    super();
+
+    this.authService = new AuthService(new UserRepository());
   }
 
   registration = async (req, res) => {
-    try {
-      const { email, password } = req.body;
+    const { email, password } = req.body;
 
-      const findedUser = (await this.repository.findByEmail(email))[0];
-      if (findedUser) {
-        return res.status(STATUS.bad_request).send(`User with email: ${email} exist in BD`);
-      }
+    const createdUser = await this.authService.registration(email, password);
 
-      const hashedPassword = await bcrypt.hash(password, STRENGTH_BCRYCT);
-      let user = new UserEntity();
-      user.email = email;
-      user.password = hashedPassword;
-
-      const createdUser = await this.repository.add(user);
-
-      return res.status(STATUS.created).json({ id: createdUser.id, email: createdUser.email });
-    } catch (error) {
-      console.log('registration:', error);
-      return res
-        .status(STATUS.ok)
-        .json({ message: error.message, userCode: USER_CODE.error_server });
-    }
+    return res.status(STATUS.created).json({ id: createdUser.id, email: createdUser.email });
   };
 
   login = async (req, res) => {

@@ -1,9 +1,8 @@
 import { Router } from 'express';
 import AuthController from '../controllers/AuthController.js';
-import UserRepository from '../repositories/UserRepository.js';
 
 const authRouter = new Router();
-const authController = new AuthController(new UserRepository());
+const authController = new AuthController();
 
 authRouter.post('/registration', authController.registration);
 authRouter.post('/login', authController.login);

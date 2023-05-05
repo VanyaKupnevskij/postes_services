@@ -4,10 +4,19 @@ export const STATUS = {
   created: 201,
   non_content: 204,
   ok: 200,
+  fall_server: 500,
 };
 
 export const USER_CODE = {
+  ok: 200,
   error_server: 500,
+};
+
+export const LAYER = {
+  global: 'global',
+  controller: 'controller',
+  service: 'service',
+  repository: 'repository',
 };
 
 export const STRENGTH_BCRYCT = 12;

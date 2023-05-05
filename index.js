@@ -1,7 +1,9 @@
 import express from 'express';
+import 'express-async-errors';
 import authRouter from './routers/auth.route.js';
 import postRouter from './routers/post.route.js';
 import cors from './middlewares/cors.middleware.js';
+import error from './middlewares/error.middleware.js';
 import config from 'config';
 
 const app = express();
@@ -22,12 +24,14 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
+app.use(error);
+
 async function start() {
   try {
     app.listen(PORT, () => console.log(`Server start OK on port: ${PORT}`));
   } catch (error) {
-    console.log('Server Error:', error.message);
-    process.exit(1);
+    console.log(error);
+    process.exit(-1);
   }
 }
 

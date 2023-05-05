@@ -3,11 +3,11 @@ import config from 'config';
 import bcrypt from 'bcryptjs';
 import { STATUS, USER_CODE, STRENGTH_BCRYCT } from '../config/enums.js';
 import UserEntity from '../entities/UserEntity.js';
-import IController from './IController.js';
+import BaseController from './BaseController.js';
 
-class PostController extends IController {
-  constructor(repository) {
-    super(repository);
+class PostController extends BaseController {
+  constructor() {
+    super();
   }
 
   create = async (req, res) => {
