@@ -1,16 +1,16 @@
 import { Router } from 'express';
-import AuthController from '../controllers/AuthController.js';
-import RegistrationAction from '../ations/auth/registrationAction.js';
+import RegistrationAction from '../ations/auth/RegistrationAction.js';
+import LoginAction from '../ations/auth/LoginAction.js';
 
 const authRouter = new Router();
-const authController = new AuthController();
 
 const registrationAction = new RegistrationAction();
+const loginAction = new LoginAction();
 
 authRouter.post('/registration', registrationAction.run);
-authRouter.post('/login', authController.login);
-authRouter.get('/users', authController.getUsers);
-authRouter.get('/users/:id', authController.getUserById);
-authRouter.delete('/users/:id', authController.deleteUserById);
+authRouter.post('/login', loginAction.run);
+// authRouter.get('/users', authController.getUsers);
+// authRouter.get('/users/:id', authController.getUserById);
+// authRouter.delete('/users/:id', authController.deleteUserById);
 
 export default authRouter;
