@@ -20,23 +20,23 @@ export const ERROR_PRESETS = {
   },
   REGISTRATION: (email) => {
     return {
-      message: `User with email: ${email} exist in BD`,
+      message: `User with email <${email}> exist in BD`,
       status: STATUS.bad_request,
       userCode: USER_CODE.ok,
       layer: LAYER.service,
     };
   },
-  INVALID_ID: (id) => {
+  INVALID_INPUT: (name, data, message) => {
     return {
-      message: `Id: ${id} is not valid`,
+      message: `${name}${data ? ` <${data}>` : ''}: ${message}`,
       status: STATUS.bad_request,
       userCode: USER_CODE.ok,
-      layer: LAYER.controller,
+      layer: LAYER.action,
     };
   },
   USER_ID_NOT_EXIST: (id) => {
     return {
-      message: `The user with id: ${id} does not exist.`,
+      message: `The user with id <${id}> does not exist.`,
       status: STATUS.bad_request,
       userCode: USER_CODE.ok,
       layer: LAYER.repository,
@@ -44,7 +44,7 @@ export const ERROR_PRESETS = {
   },
   DELETE_USER_BY_ID: (id) => {
     return {
-      message: `Failed deleted user by id:${id}`,
+      message: `Failed deleted user by id <${id}>`,
       status: STATUS.ok,
       userCode: USER_CODE.error_server,
       layer: LAYER.service,

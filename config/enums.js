@@ -14,7 +14,7 @@ export const USER_CODE = {
 
 export const LAYER = {
   global: 'global',
-  controller: 'controller',
+  action: 'action',
   service: 'service',
   repository: 'repository',
 };
