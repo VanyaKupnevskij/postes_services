@@ -1,11 +1,10 @@
 import IAction from '../IAction.js';
-import { STATUS } from '../../config/enums.js';
 
 import AuthService from '../../services/AuthService.js';
 import UserRepository from '../../repositories/UserRepository.js';
 import AppError, { ERROR_PRESETS } from '../../errors/AppError.js';
 
-class RegistrationAction extends IAction {
+class LoginAction extends IAction {
   constructor() {
     super();
 
@@ -13,7 +12,7 @@ class RegistrationAction extends IAction {
   }
 
   get accessTag() {
-    return 'auth:registration';
+    return 'auth:login';
   }
 
   run = async (req, res) => {
@@ -61,4 +60,4 @@ class RegistrationAction extends IAction {
   }
 }
 
-export default RegistrationAction;
+export default LoginAction;
