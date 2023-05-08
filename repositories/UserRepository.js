@@ -9,10 +9,11 @@ class UserRepository extends IRepository {
   }
 
   async add(newUser) {
-    await connection.query('INSERT INTO users (id, email, password) VALUES (?, ?, ?)', [
+    await connection.query('INSERT INTO users (id, email, password, role) VALUES (?, ?, ?, ?)', [
       newUser.id,
       newUser.email,
       newUser.password,
+      newUser.role,
     ]);
 
     return this.getById(newUser.id);

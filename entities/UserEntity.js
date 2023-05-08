@@ -6,6 +6,7 @@ class UserEntity extends IEntity {
 
     this.email = '';
     this.password = '';
+    this.role = 'user';
   }
 }
 

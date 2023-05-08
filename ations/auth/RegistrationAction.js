@@ -1,5 +1,5 @@
 import IAction from '../IAction.js';
-import { STATUS } from '../../config/enums.js';
+import { ROLES, STATUS } from '../../config/enums.js';
 
 import AuthService from '../../services/AuthService.js';
 import UserRepository from '../../repositories/UserRepository.js';
@@ -17,15 +17,17 @@ class RegistrationAction extends IAction {
   }
 
   run = async (req, res) => {
-    const { email, password } = this.validate(req.body);
+    const { email, password, role } = this.validate(req.body);
 
-    const createdUser = await this.authService.registration(email, password);
+    const createdUser = await this.authService.registration(email, password, role);
 
-    return res.status(STATUS.created).json({ id: createdUser.id, email: createdUser.email });
+    return res
+      .status(STATUS.created)
+      .json({ id: createdUser.id, email: createdUser.email, role: createdUser.role });
   };
 
   validate(input) {
-    const { email, password } = input;
+    const { email, password, role } = input;
 
     const regexEmail = /^([a-z0-9]+(?:[._-][a-z0-9]+)*)@([a-z0-9]+(?:[.-][a-z0-9]+)*\.[a-z]{2,})$/i;
 
@@ -46,6 +48,9 @@ class RegistrationAction extends IAction {
     if (!password) {
       throw new AppError(ERROR_PRESETS.INVALID_INPUT('Password', password, 'must exist'));
     }
+    if (!Object.values(ROLES).includes(role)) {
+      throw new AppError(ERROR_PRESETS.INVALID_INPUT('Role', role, 'not found'));
+    }
 
     if (!regexEmail.test(email)) {
       throw new AppError(ERROR_PRESETS.INVALID_INPUT('Email', email, "isn't correct. Check it"));
@@ -57,7 +62,7 @@ class RegistrationAction extends IAction {
       }
     }
 
-    return { email, password };
+    return { email, password, role };
   }
 }
 

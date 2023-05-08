@@ -12,7 +12,7 @@ class AuthService extends BaseService {
     super(repository);
   }
 
-  registration = async (email, password) => {
+  registration = async (email, password, role) => {
     const findedUser = (await this.repository.findByEmail(email))[0];
     if (findedUser) {
       throw new AppError(ERROR_PRESETS.REGISTRATION(email));
@@ -22,6 +22,7 @@ class AuthService extends BaseService {
     let user = new UserEntity();
     user.email = email;
     user.password = hashedPassword;
+    user.role = role;
 
     const createdUser = await this.repository.add(user);
 
@@ -39,7 +40,7 @@ class AuthService extends BaseService {
       throw new AppError(ERROR_PRESETS.AUTHORIZATION);
     }
 
-    const token = jwt.sign({ id: findedUser.id }, config.get('jwtSecret'));
+    const token = jwt.sign({ id: findedUser.id, role: findedUser.role }, config.get('jwtSecret'));
 
     return token;
   };

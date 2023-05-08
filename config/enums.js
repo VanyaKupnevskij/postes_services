@@ -20,3 +20,15 @@ export const LAYER = {
 };
 
 export const STRENGTH_BCRYCT = 12;
+
+export const ROLES = {
+  user: 'user',
+  admin: 'admin',
+};
+
+const sharedPermissions = ['auth:getuserbyid', 'auth:getusers'];
+
+export const PERMISSIONS = {
+  admin: [...sharedPermissions, 'auth:deleteuserbyid'],
+  user: [...sharedPermissions],
+};
