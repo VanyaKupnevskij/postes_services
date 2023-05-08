@@ -31,7 +31,7 @@ class UserRepository extends IRepository {
   }
 
   async getAll() {
-    const [rows] = await connection.execute('SELECT id, email FROM users');
+    const [rows] = await connection.execute('SELECT id, email, role FROM users');
 
     return rows;
   }
