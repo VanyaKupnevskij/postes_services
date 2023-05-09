@@ -18,9 +18,7 @@ class DeleteUserByIdAction extends IAction {
   }
 
   run = async (req, res) => {
-    if (!PERMISSIONS[req.user.role].includes(this.accessTag)) {
-      throw new AppError({ ...ERROR_PRESETS.AUTHORIZATION, layer: LAYER.action });
-    }
+    this.checkRole(req.user.role);
 
     const { id } = this.validate(req.params);
 

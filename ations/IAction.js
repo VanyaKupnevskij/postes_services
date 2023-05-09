@@ -1,3 +1,6 @@
+import { LAYER, PERMISSIONS } from '../config/enums.js';
+import AppError, { ERROR_PRESETS } from '../errors/AppError.js';
+
 class IAction {
   constructor() {
     this.run = async (req, res) => {
@@ -10,6 +13,12 @@ class IAction {
 
     if (this.accessTag === undefined) {
       throw new Error('Must override .accessTag() method');
+    }
+  }
+
+  checkRole(role) {
+    if (!PERMISSIONS[role].includes(this.accessTag)) {
+      throw new AppError({ ...ERROR_PRESETS.AUTHORIZATION, layer: LAYER.action });
     }
   }
 }
