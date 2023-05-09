@@ -10,7 +10,7 @@ class PostService extends BaseService {
   create = async (title, text) => {
     const findedPost = (await this.repository.findByTitle(title))[0];
     if (findedPost) {
-      throw new AppError(ERROR_PRESETS.REGISTRATION(title));
+      throw new AppError(ERROR_PRESETS.CREATE(title));
     }
 
     let post = new PostEntity();
@@ -37,7 +37,7 @@ class PostService extends BaseService {
   deletePostById = async (id) => {
     const isSeccessful = await this.repository.remove(id);
     if (!isSeccessful) {
-      throw new AppError(ERROR_PRESETS.DELETE_USER_BY_ID(id));
+      throw new AppError(ERROR_PRESETS.DELETE_POST_BY_ID(id));
     }
   };
 }

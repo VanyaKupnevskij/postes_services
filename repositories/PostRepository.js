@@ -24,7 +24,7 @@ class PostRepository extends IRepository {
     const [rows] = await connection.execute('SELECT * FROM postes WHERE id = ?', [id]);
 
     const post = rows[0];
-    if (!post) throw new AppError(ERROR_PRESETS.USER_ID_NOT_EXIST(id));
+    if (!post) throw new AppError(ERROR_PRESETS.POST_ID_NOT_EXIST(id));
 
     return post;
   }
