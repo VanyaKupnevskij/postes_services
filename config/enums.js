@@ -26,9 +26,15 @@ export const ROLES = {
   admin: 'admin',
 };
 
-const sharedPermissions = ['auth:getuserbyid', 'auth:getusers'];
+const sharedPermissions = [
+  'auth:get-user-by-id',
+  'auth:get-users',
+  'post:create',
+  'post:get-postes',
+  'post:get-post-by-id',
+];
 
 export const PERMISSIONS = {
-  admin: [...sharedPermissions, 'auth:deleteuserbyid'],
+  admin: [...sharedPermissions, 'auth:delete-user-by-id', 'post:delete-post-by-id'],
   user: [...sharedPermissions],
 };

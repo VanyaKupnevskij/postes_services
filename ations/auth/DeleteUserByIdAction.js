@@ -4,7 +4,6 @@ import UID from '../../lib/UID.js';
 import AuthService from '../../services/AuthService.js';
 import UserRepository from '../../repositories/UserRepository.js';
 import AppError, { ERROR_PRESETS } from '../../errors/AppError.js';
-import { LAYER, PERMISSIONS } from '../../config/enums.js';
 
 class DeleteUserByIdAction extends IAction {
   constructor() {
@@ -14,7 +13,7 @@ class DeleteUserByIdAction extends IAction {
   }
 
   get accessTag() {
-    return 'auth:deleteuserbyid';
+    return 'auth:delete-user-by-id';
   }
 
   run = async (req, res) => {

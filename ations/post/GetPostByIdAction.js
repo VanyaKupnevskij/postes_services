@@ -1,19 +1,19 @@
 import IAction from '../IAction.js';
 
 import UID from '../../lib/UID.js';
-import AuthService from '../../services/AuthService.js';
-import UserRepository from '../../repositories/UserRepository.js';
+import PostService from '../../services/PostService.js';
+import PostRepository from '../../repositories/PostRepository.js';
 import AppError, { ERROR_PRESETS } from '../../errors/AppError.js';
 
-class GetUserByIdAction extends IAction {
+class GetPostByIdAction extends IAction {
   constructor() {
     super();
 
-    this.authService = new AuthService(new UserRepository());
+    this.postService = new PostService(new PostRepository());
   }
 
   get accessTag() {
-    return 'auth:get-user-by-id';
+    return 'post:get-post-by-id';
   }
 
   run = async (req, res) => {
@@ -21,9 +21,9 @@ class GetUserByIdAction extends IAction {
 
     const { id } = this.validate(req.params);
 
-    const user = await this.authService.getUserById(id);
+    const post = await this.postService.getPostById(id);
 
-    return res.json({ id: user.id, email: user.email });
+    return res.json({ ...post });
   };
 
   validate(input) {
@@ -37,4 +37,4 @@ class GetUserByIdAction extends IAction {
   }
 }
 
-export default GetUserByIdAction;
+export default GetPostByIdAction;

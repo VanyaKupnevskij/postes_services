@@ -2,8 +2,6 @@ import IAction from '../IAction.js';
 
 import AuthService from '../../services/AuthService.js';
 import UserRepository from '../../repositories/UserRepository.js';
-import { LAYER, PERMISSIONS } from '../../config/enums.js';
-import AppError, { ERROR_PRESETS } from '../../errors/AppError.js';
 
 class GetUsersAction extends IAction {
   constructor() {
@@ -13,7 +11,7 @@ class GetUsersAction extends IAction {
   }
 
   get accessTag() {
-    return 'auth:getusers';
+    return 'auth:get-users';
   }
 
   run = async (req, res) => {

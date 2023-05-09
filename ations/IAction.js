@@ -17,7 +17,7 @@ class IAction {
   }
 
   checkRole(role) {
-    if (!PERMISSIONS[role].includes(this.accessTag)) {
+    if (!role || !PERMISSIONS[role].includes(this.accessTag)) {
       throw new AppError({ ...ERROR_PRESETS.AUTHORIZATION, layer: LAYER.action });
     }
   }
