@@ -4,6 +4,8 @@ import { STATUS } from '../../config/enums.js';
 import PostService from '../../services/PostService.js';
 import PostRepository from '../../repositories/PostRepository.js';
 import AppError, { ERROR_PRESETS } from '../../errors/AppError.js';
+import FacebookInfoEntity from '../../entities/FacebookInfoEntity.js';
+import TelegramInfoEntity from '../../entities/TelegramInfoEntity.js';
 
 class CreateAction extends IAction {
   constructor() {
@@ -22,17 +24,21 @@ class CreateAction extends IAction {
     let validData = this.validate(req.body);
 
     // TODO: remove to facebook and telegram sevices
-    let facebook = new FacebookInfoEntity();
-    facebook.id_post = validData.facebook_info.id_post;
-    facebook.files = validData.facebook_info.files;
+    if (validData.facebook_info) {
+      let facebook = new FacebookInfoEntity();
+      facebook.id_post = validData.facebook_info.id_post;
+      facebook.files = validData.facebook_info.files;
 
-    let telegram = new TelegramInfoEntity();
-    telegram.id_files_post = telegram_info.id_files_post;
-    telegram.id_post = validData.telegram_info.id_post;
-    telegram.files = validData.telegram_info.files;
+      validData.facebook_info = facebook;
+    }
+    if (validData.telegram_info) {
+      let telegram = new TelegramInfoEntity();
+      telegram.id_files_post = telegram_info.id_files_post;
+      telegram.id_post = validData.telegram_info.id_post;
+      telegram.files = validData.telegram_info.files;
 
-    validData.facebook_info = facebook;
-    validData.telegram_info = telegram;
+      validData.telegram_info = telegram;
+    }
 
     const createdPost = await this.postService.create(validData);
 
