@@ -1,10 +1,10 @@
 import IEntity from './IEntity.js';
 
 class TagEntity extends IEntity {
-  constructor(uid) {
+  constructor({ uid, text = '' }) {
     super(uid);
 
-    this.text = '';
+    this.text = text;
   }
 }
 

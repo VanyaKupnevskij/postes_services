@@ -1,17 +1,16 @@
 import IEntity from './IEntity.js';
-import FacebookInfoEntity from './FacebookInfoEntity.js';
-import TelegramInfoEntity from './TelegramInfoEntity.js';
 
 class PostEntity extends IEntity {
   constructor(uid) {
-    super(uid, facebook_uid, telegram_uid);
+    super(uid);
 
     this.title = '';
     this.text = '';
     this.created = new Date(Date.now());
     this.modified = new Date(Date.now());
-    this.facebook_info = new FacebookInfoEntity(facebook_uid);
-    this.telegram_info = new TelegramInfoEntity(telegram_uid);
+    this.facebook_info = null;
+    this.telegram_info = null;
+    this.tags = [];
   }
 }
 

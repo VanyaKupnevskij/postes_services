@@ -19,24 +19,35 @@ class CreateAction extends IAction {
   run = async (req, res) => {
     this.checkRole(req.user.role);
 
-    const { title, text } = this.validate(req.body);
+    let validData = this.validate(req.body);
 
-    const createdPost = await this.postService.create(title, text);
+    // TODO: remove to facebook and telegram sevices
+    let facebook = new FacebookInfoEntity();
+    facebook.id_post = validData.facebook_info.id_post;
+    facebook.files = validData.facebook_info.files;
+
+    let telegram = new TelegramInfoEntity();
+    telegram.id_files_post = telegram_info.id_files_post;
+    telegram.id_post = validData.telegram_info.id_post;
+    telegram.files = validData.telegram_info.files;
+
+    validData.facebook_info = facebook;
+    validData.telegram_info = telegram;
+
+    const createdPost = await this.postService.create(validData);
 
     return res.status(STATUS.created).json({ id: createdPost.id, title: createdPost.title });
   };
 
   validate(input) {
-    const { title, text } = input;
-
-    if (!title) {
+    if (!input.title) {
       throw new AppError(ERROR_PRESETS.INVALID_INPUT('Title', title, 'must exist'));
     }
-    if (!text) {
+    if (!input.text) {
       throw new AppError(ERROR_PRESETS.INVALID_INPUT('Text', text, 'must exist'));
     }
 
-    return { title, text };
+    return input;
   }
 }
 

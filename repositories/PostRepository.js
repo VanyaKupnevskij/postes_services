@@ -2,6 +2,9 @@ import IRepository from './IRepository.js';
 
 import { pool as connection } from '../config/database.mysql.js';
 import AppError, { ERROR_PRESETS } from '../errors/AppError.js';
+import loadQuery from '../queries/loadQuery.js';
+
+const createPostQuery = loadQuery('createPost');
 
 class PostRepository extends IRepository {
   constructor() {
@@ -9,8 +12,10 @@ class PostRepository extends IRepository {
   }
 
   async add(newPost) {
-    await connection.query('INSERT INTO users (id, title, text) VALUES (?, ?, ?)', [
+    await connection.query(createPostQuery, [
       newPost.id,
+      newPost.created,
+      newPost.modified,
       newPost.title,
       newPost.text,
     ]);

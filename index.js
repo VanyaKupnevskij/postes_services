@@ -5,6 +5,7 @@ import postRouter from './routers/post.route.js';
 import cors from './middlewares/cors.middleware.js';
 import error from './middlewares/error.middleware.js';
 import config from 'config';
+import * as path from 'path';
 
 const app = express();
 
