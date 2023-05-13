@@ -7,4 +7,5 @@ export const pool = createPool({
   password: config.get('PASSWORD_MYSQL'),
   port: Number(config.get('PORT_MYSQL')),
   database: config.get('DATABASE_MYSQL'),
+  multipleStatements: true,
 });
